@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farm2Win Codex — CedJeux</title>
+<meta name="description" content="Guide visuel interactif des cultures, recettes et commandes de Farm2Win, le mini-jeu du bot Discord CedJeux.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --stone-50:#eef0e2;
+    --stone-100:#e3e6d3;
+    --stone-200:#d3d7bf;
+    --ink-900:#241d14;
+    --ink-700:#4a4132;
+    --card:#f7f5ea;
+    --card-line:#cdd0b9;
+    --leaf:#3f6b2f;
+    --leaf-soft:#5c8a48;
+    --harvest:#a8641f;
+    --shadow: 0 1px 2px rgba(36,29,20,0.06), 0 8px 24px rgba(36,29,20,0.08);
+
+    --tier1:#3f6b2f; --tier1-soft:#e3ecda;
+    --tier2:#8a6420; --tier2-soft:#efe6d0;
+    --tier3:#a8541f; --tier3-soft:#f2e0cf;
+    --tier4:#1f6f60; --tier4-soft:#dceae5;
+    --tier5:#8c2f2f; --tier5-soft:#f1dcda;
+    --tier6:#5b3c96; --tier6-soft:#e6ddf4;
+
+    --font-display:'Fraunces', Georgia, serif;
+    --font-body:'Work Sans', system-ui, sans-serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --stone-50:#151109;
+      --stone-100:#1c1710;
+      --stone-200:#2a2318;
+      --ink-900:#f1ead8;
+      --ink-700:#c9bfa9;
+      --card:#1f1a12;
+      --card-line:#382f1f;
+      --leaf:#7ecb5d;
+      --leaf-soft:#a8dc8f;
+      --harvest:#e2a256;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px rgba(0,0,0,0.4);
+
+      --tier1:#7ecb5d; --tier1-soft:#233420;
+      --tier2:#d9a94a; --tier2-soft:#33291a;
+      --tier3:#e2a256; --tier3-soft:#3a2718;
+      --tier4:#4fbfa8; --tier4-soft:#1c332e;
+      --tier5:#e0665f; --tier5-soft:#3a2020;
+      --tier6:#a888e0; --tier6-soft:#2a2338;
+    }
+  }
+  :root[data-theme="dark"]{
+    --stone-50:#151109;
+    --stone-100:#1c1710;
+    --stone-200:#2a2318;
+    --ink-900:#f1ead8;
+    --ink-700:#c9bfa9;
+    --card:#1f1a12;
+    --card-line:#382f1f;
+    --leaf:#7ecb5d;
+    --leaf-soft:#a8dc8f;
+    --harvest:#e2a256;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px rgba(0,0,0,0.4);
+
+    --tier1:#7ecb5d; --tier1-soft:#233420;
+    --tier2:#d9a94a; --tier2-soft:#33291a;
+    --tier3:#e2a256; --tier3-soft:#3a2718;
+    --tier4:#4fbfa8; --tier4-soft:#1c332e;
+    --tier5:#e0665f; --tier5-soft:#3a2020;
+    --tier6:#a888e0; --tier6-soft:#2a2338;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--stone-50); color:var(--ink-900);
+    font-family:var(--font-body); line-height:1.55; overflow-x:hidden;
+  }
+  .tnum{ font-variant-numeric:tabular-nums; }
+
+  .back-link{
+    display:block; max-width:1180px; margin:0 auto; padding:18px 22px 0;
+    font-family:var(--font-mono); font-size:.78rem; text-decoration:none; color:var(--ink-700);
+  }
+  .back-link:hover{color:var(--leaf);}
+
+  .page{max-width:1180px; margin:0 auto; padding:0 22px 80px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:32px 0 34px; display:flex; flex-wrap:wrap; gap:28px; align-items:flex-end;
+    justify-content:space-between; border-bottom:1px solid var(--card-line);
+  }
+  .hero-text{max-width:600px;}
+  .eyebrow{
+    font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--leaf); font-weight:600; display:flex; align-items:center; gap:8px; margin-bottom:14px;
+  }
+  .eyebrow::before{content:''; width:7px; height:7px; border-radius:50%; background:var(--leaf); display:inline-block;}
+  h1{
+    font-family:var(--font-display); font-weight:700; font-size:clamp(2rem, 4.4vw, 3.1rem);
+    margin:0 0 12px; text-wrap:balance; letter-spacing:-0.01em;
+  }
+  h1 em{font-style:italic; color:var(--leaf); font-weight:600;}
+  .hero-text p{color:var(--ink-700); font-size:1.02rem; max-width:52ch; margin:0;}
+  .hero-cta{
+    display:flex; flex-direction:column; gap:10px; align-items:flex-start; min-width:220px;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:9px;
+    font-weight:600; font-size:.9rem; text-decoration:none; border:1px solid transparent;
+    font-family:var(--font-body); cursor:pointer;
+  }
+  .btn-primary{background:var(--leaf); color:var(--stone-50);}
+  .btn-ghost{background:transparent; color:var(--ink-900); border-color:var(--card-line); font-size:.82rem;}
+  .hero-note{font-family:var(--font-mono); font-size:.74rem; color:var(--ink-700);}
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{
+    position:sticky; top:0; z-index:10; background:var(--stone-50);
+    display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
+    padding:16px 0; border-bottom:1px solid var(--card-line);
+  }
+  .search-wrap{position:relative; flex:1; min-width:200px; max-width:280px;}
+  .search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); opacity:.5;}
+  #search{
+    width:100%; padding:9px 12px 9px 34px; border-radius:8px; border:1px solid var(--card-line);
+    background:var(--card); color:var(--ink-900); font-family:var(--font-body); font-size:.88rem;
+  }
+  #search:focus{outline:2px solid var(--leaf); outline-offset:1px;}
+  .tier-chips{display:flex; gap:6px; flex-wrap:wrap;}
+  .chip{
+    font-family:var(--font-mono); font-size:.72rem; font-weight:600; padding:6px 11px; border-radius:999px;
+    border:1px solid var(--card-line); background:var(--card); color:var(--ink-700); cursor:pointer;
+    transition:background .12s, color .12s, border-color .12s;
+  }
+  .chip:hover{border-color:var(--leaf);}
+  .chip[aria-pressed="true"]{background:var(--leaf); color:var(--stone-50); border-color:var(--leaf);}
+  select#sort{
+    padding:8px 10px; border-radius:8px; border:1px solid var(--card-line); background:var(--card);
+    color:var(--ink-900); font-family:var(--font-body); font-size:.82rem; cursor:pointer;
+  }
+
+  /* ---------- LAYOUT ---------- */
+  main{display:grid; grid-template-columns:1fr; gap:36px; padding-top:30px;}
+  @media (min-width:980px){
+    main{grid-template-columns:1.55fr 1fr; align-items:start;}
+  }
+
+  /* ---------- CODEX ---------- */
+  .tier-band{margin-bottom:30px;}
+  .tier-head{
+    display:flex; align-items:baseline; gap:10px; margin-bottom:12px;
+  }
+  .tier-dot{width:10px; height:10px; border-radius:3px; background:var(--tier-c);}
+  .tier-name{font-family:var(--font-display); font-weight:700; font-size:1.15rem;}
+  .tier-range{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-700); text-transform:uppercase; letter-spacing:.06em;}
+  .crop-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(148px,1fr)); gap:12px;}
+
+  .crop-card{
+    --tier-c: var(--tier1); --tier-soft: var(--tier1-soft);
+    background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:14px;
+    text-align:left; cursor:pointer; box-shadow:var(--shadow); font-family:var(--font-body);
+    display:flex; flex-direction:column; gap:8px; position:relative; overflow:hidden;
+    transition:transform .12s, border-color .12s;
+  }
+  .crop-card::before{
+    content:''; position:absolute; inset:0 0 auto 0; height:3px; background:var(--tier-c);
+  }
+  .crop-card:hover{transform:translateY(-2px); border-color:var(--tier-c);}
+  .crop-card.active{border-color:var(--tier-c); box-shadow:0 0 0 2px var(--tier-c);}
+  .crop-card .emoji{font-size:1.9rem; line-height:1;}
+  .crop-card .name{font-weight:600; font-size:.9rem;}
+  .crop-card .lvl{
+    font-family:var(--font-mono); font-size:.66rem; color:var(--tier-c); background:var(--tier-soft);
+    display:inline-block; padding:2px 7px; border-radius:5px; align-self:flex-start;
+  }
+  .grow-bar{height:4px; border-radius:2px; background:var(--stone-200); overflow:hidden;}
+  .grow-bar > span{display:block; height:100%; background:var(--tier-c);}
+  .crop-card .price-line{
+    font-family:var(--font-mono); font-size:.72rem; color:var(--ink-700); display:flex; justify-content:space-between;
+  }
+  .crop-empty{
+    grid-column:1/-1; font-family:var(--font-mono); font-size:.82rem; color:var(--ink-700); padding:14px 0;
+  }
+
+  /* ---------- DETAIL PANEL ---------- */
+  .detail-panel{
+    position:sticky; top:74px; background:var(--card); border:1px solid var(--card-line); border-radius:16px;
+    padding:24px; box-shadow:var(--shadow);
+  }
+  .detail-head{display:flex; align-items:center; gap:14px; margin-bottom:6px;}
+  .detail-head .emoji{font-size:2.6rem;}
+  .detail-head h2{font-family:var(--font-display); font-size:1.4rem; margin:0; font-weight:700;}
+  .detail-tier{
+    font-family:var(--font-mono); font-size:.7rem; font-weight:600; padding:3px 9px; border-radius:6px;
+    display:inline-block; margin-top:4px;
+  }
+  .stat-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0; padding:16px;
+    background:var(--stone-100); border-radius:10px;
+  }
+  .stat{display:flex; flex-direction:column; gap:2px;}
+  .stat .k{font-family:var(--font-mono); font-size:.66rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-700);}
+  .stat .v{font-family:var(--font-mono); font-weight:600; font-size:1rem;}
+
+  .calc{border-top:1px solid var(--card-line); padding-top:18px; margin-top:6px;}
+  .calc h3{font-family:var(--font-display); font-size:1rem; margin:0 0 12px; font-weight:600;}
+  .calc-row{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px;}
+  .calc-row label{font-size:.82rem; color:var(--ink-700);}
+  .calc-row input[type="range"]{flex:1; accent-color:var(--leaf); margin:0 10px;}
+  .calc-row input[type="number"]{
+    width:64px; padding:6px 8px; border-radius:6px; border:1px solid var(--card-line);
+    background:var(--stone-50); color:var(--ink-900); font-family:var(--font-mono); font-size:.85rem;
+  }
+  .calc-val{font-family:var(--font-mono); font-size:.85rem; min-width:34px; text-align:right; font-weight:600;}
+  .calc-out{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px;
+  }
+  .calc-out .cell{background:var(--stone-100); border-radius:8px; padding:10px 12px;}
+  .calc-out .cell .k{font-family:var(--font-mono); font-size:.64rem; text-transform:uppercase; color:var(--ink-700); letter-spacing:.05em;}
+  .calc-out .cell .v{font-family:var(--font-mono); font-weight:700; font-size:1.05rem; margin-top:2px;}
+  .calc-out .profit .v{color:var(--leaf);}
+
+  /* ---------- MECHANICS ---------- */
+  #mechanics{grid-column:1/-1; border-top:1px solid var(--card-line); padding-top:34px;}
+  .mech-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:16px; margin-bottom:32px;}
+  .mech-card{
+    background:var(--card); border:1px solid var(--card-line); border-radius:14px; padding:20px;
+    box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px;
+  }
+  .mech-card .mech-icon{font-size:1.6rem;}
+  .mech-card h3{font-family:var(--font-display); font-size:1.05rem; margin:0; font-weight:700;}
+  .mech-card p{color:var(--ink-700); font-size:.86rem; margin:0;}
+  .mech-tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;}
+  .mech-tag{
+    font-family:var(--font-mono); font-size:.68rem; font-weight:600; padding:3px 8px; border-radius:5px;
+  }
+  .mech-tag.good{background:var(--tier1-soft); color:var(--tier1);}
+  .mech-tag.bad{background:var(--tier5-soft); color:var(--tier5);}
+  .mech-tag.neutral{background:var(--tier2-soft); color:var(--tier2);}
+
+  .recipe-list{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:14px;}
+  .recipe-card{
+    background:var(--card); border:1px solid var(--card-line); border-radius:14px; padding:18px;
+    box-shadow:var(--shadow);
+  }
+  .recipe-title{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .recipe-title .emoji{font-size:1.6rem;}
+  .recipe-title .name{font-family:var(--font-display); font-weight:700; font-size:1.02rem;}
+  .recipe-price{
+    margin-left:auto; font-family:var(--font-mono); font-size:.78rem; color:var(--harvest); font-weight:600;
+  }
+  .recipe-flow{display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:.85rem;}
+  .recipe-ing{
+    display:flex; align-items:center; gap:5px; background:var(--stone-100); border-radius:7px;
+    padding:5px 9px; font-family:var(--font-mono); font-size:.78rem;
+  }
+  .recipe-plus{color:var(--ink-700); font-family:var(--font-mono);}
+  .recipe-arrow{color:var(--leaf); font-weight:700;}
+
+  /* ---------- COMMANDS ---------- */
+  #commands{grid-column:1/-1; border-top:1px solid var(--card-line); padding-top:34px;}
+  .cmd-section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:8px;}
+  .cmd-section-head h2{font-family:var(--font-display); font-size:1.5rem; margin:0; font-weight:700;}
+  .cmd-section-head p{color:var(--ink-700); font-size:.88rem; margin:0;}
+  .cmd-list{display:flex; flex-direction:column; border:1px solid var(--card-line); border-radius:12px; overflow:hidden;}
+  .cmd-item{border-bottom:1px solid var(--card-line); background:var(--card);}
+  .cmd-item:last-child{border-bottom:none;}
+  .cmd-trigger{
+    width:100%; display:flex; align-items:center; gap:14px; padding:14px 18px; background:none; border:none;
+    cursor:pointer; text-align:left; font-family:var(--font-body); color:var(--ink-900);
+  }
+  .cmd-trigger .badge{
+    font-family:var(--font-mono); font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+    padding:3px 8px; border-radius:5px; flex-shrink:0;
+  }
+  .badge-cedjeux{background:var(--tier1-soft); color:var(--tier1);}
+  .badge-farm2win{background:var(--tier3-soft); color:var(--tier3);}
+  .cmd-trigger code{font-family:var(--font-mono); font-weight:600; font-size:.92rem; color:var(--harvest);}
+  .cmd-trigger .desc{color:var(--ink-700); font-size:.85rem; flex:1;}
+  .cmd-trigger .chev{transition:transform .15s; opacity:.5; flex-shrink:0;}
+  .cmd-item.open .chev{transform:rotate(90deg);}
+  .cmd-body{max-height:0; overflow:hidden; transition:max-height .18s ease;}
+  .cmd-item.open .cmd-body{max-height:90px;}
+  .cmd-body-inner{padding:0 18px 16px 52px;}
+  .cmd-example{
+    font-family:var(--font-mono); font-size:.82rem; background:var(--stone-100); border:1px solid var(--card-line);
+    border-radius:7px; padding:8px 12px; display:inline-block; color:var(--ink-900);
+  }
+
+  footer{
+    margin-top:50px; padding-top:24px; border-top:1px solid var(--card-line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:var(--font-mono); font-size:.74rem; color:var(--ink-700);
+  }
+  footer a{color:var(--ink-700);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+
+  @media (max-width:640px){
+    .stat-grid{grid-template-columns:1fr 1fr;}
+    .detail-panel{position:static;}
+  }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html">← Retour à l'accueil CedJeux</a>
+
+<div class="page">
+
+  <header class="hero">
+    <div class="hero-text">
+      <span class="eyebrow">CedJeux · Codex Farm2Win</span>
+      <h1>Toutes les cultures, <em>toutes les commandes</em>.</h1>
+      <p>Le guide visuel de Farm2Win — clique une culture pour voir ses statistiques complètes et simuler ta prochaine récolte.</p>
+    </div>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://discord.com/oauth2/authorize?client_id=1544005975307059250&permissions=2147600448&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener">Inviter CedJeux</a>
+      <span class="hero-note">10 cultures · 3 recettes · 15 commandes</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Chercher une culture…" autocomplete="off">
+    </div>
+    <div class="tier-chips" id="tierChips" role="group" aria-label="Filtrer par palier"></div>
+    <select id="sort" aria-label="Trier">
+      <option value="unlock">Ordre de déblocage</option>
+      <option value="price-asc">Prix croissant</option>
+      <option value="price-desc">Prix décroissant</option>
+      <option value="grow-asc">Pousse la plus rapide</option>
+    </select>
+  </div>
+
+  <main>
+    <section id="codex" aria-label="Codex des cultures"></section>
+
+    <aside class="detail-panel" id="detail"></aside>
+
+    <section id="mechanics" aria-label="Mécaniques avancées">
+      <div class="cmd-section-head">
+        <h2>Mécaniques avancées</h2>
+        <p>Ce qui fait vivre la ferme au-delà de la simple récolte</p>
+      </div>
+
+      <div class="mech-grid">
+        <div class="mech-card">
+          <span class="mech-icon">🔔</span>
+          <h3>Confort de jeu</h3>
+          <p>Ton salon <code style="font-family:var(--font-mono)">/codex</code> te prévient dès qu'une parcelle est prête, <code style="font-family:var(--font-mono)">/farm</code> affiche le stade de pousse en un coup d'œil, et la replantation peut se faire toute seule après chaque récolte.</p>
+          <div class="mech-tags">
+            <span class="mech-tag good">🌱🌿🌾✅ stades visuels</span>
+            <span class="mech-tag neutral">🔁 replantation auto</span>
+          </div>
+        </div>
+        <div class="mech-card">
+          <span class="mech-icon">🌦️</span>
+          <h3>Météo du serveur</h3>
+          <p>Toutes les 2 à 4h, un événement de 30 à 60 min modifie le rendement de toutes les récoltes en cours sur le serveur.</p>
+          <div class="mech-tags">
+            <span class="mech-tag good">☔ Pluie bénie ×1.25</span>
+            <span class="mech-tag bad">🐛 Parasites ×0.75</span>
+          </div>
+        </div>
+        <div class="mech-card">
+          <span class="mech-icon">📜</span>
+          <h3>Contrat spécial</h3>
+          <p>Un acheteur demande une culture précise en grande quantité contre un prix bonus. Se renouvelle toutes les 4h — <code style="font-family:var(--font-mono)">/contract</code> pour le consulter.</p>
+          <div class="mech-tags">
+            <span class="mech-tag neutral">×1.6 à ×2.0 le prix normal</span>
+          </div>
+        </div>
+        <div class="mech-card">
+          <span class="mech-icon">🏆</span>
+          <h3>Classement hebdomadaire</h3>
+          <p>Chaque semaine, le top 3 des gains (pas de la richesse totale) reçoit un bonus — <code style="font-family:var(--font-mono)">/weekly</code> pour suivre ta position.</p>
+          <div class="mech-tags">
+            <span class="mech-tag good">🥇 500</span>
+            <span class="mech-tag good">🥈 300</span>
+            <span class="mech-tag good">🥉 150</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmd-section-head" style="margin-top:8px;">
+        <h2 style="font-size:1.2rem;">Recettes de transformation</h2>
+        <p>Combine tes récoltes en produits plus rentables avec <code style="font-family:var(--font-mono)">/craft</code></p>
+      </div>
+      <div class="recipe-list" id="recipeList"></div>
+    </section>
+
+    <section id="commands" aria-label="Commandes CedJeux">
+      <div class="cmd-section-head">
+        <h2>Almanach des commandes</h2>
+        <p>Toutes les commandes slash disponibles sur CedJeux</p>
+      </div>
+      <div class="cmd-list" id="cmdList"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>CedJeux — projet personnel de Cédric Macedonia</span>
+    <span><a href="confidentialite.html">Confidentialité</a> · <a href="cgu.html">CGU</a></span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const CROPS = [
+    { id:'wheat', name:'Blé', emoji:'🌾', tier:1, unlockLevel:1, seedCost:5, growMinutes:5, baseYield:3, basePrice:4, xp:2 },
+    { id:'carrot', name:'Carotte', emoji:'🥕', tier:1, unlockLevel:1, seedCost:8, growMinutes:8, baseYield:3, basePrice:6, xp:3 },
+    { id:'potato', name:'Pomme de terre', emoji:'🥔', tier:2, unlockLevel:5, seedCost:12, growMinutes:12, baseYield:4, basePrice:9, xp:5 },
+    { id:'beetroot', name:'Betterave', emoji:'🟥', tier:2, unlockLevel:5, seedCost:14, growMinutes:14, baseYield:4, basePrice:10, xp:5 },
+    { id:'melon', name:'Melon', emoji:'🍈', tier:3, unlockLevel:12, seedCost:20, growMinutes:20, baseYield:6, basePrice:15, xp:8 },
+    { id:'pumpkin', name:'Citrouille', emoji:'🎃', tier:3, unlockLevel:12, seedCost:25, growMinutes:25, baseYield:6, basePrice:18, xp:9 },
+    { id:'sugar_cane', name:'Canne à sucre', emoji:'🎋', tier:4, unlockLevel:20, seedCost:35, growMinutes:30, baseYield:8, basePrice:25, xp:12 },
+    { id:'cocoa', name:'Cacao', emoji:'🍫', tier:4, unlockLevel:20, seedCost:40, growMinutes:35, baseYield:8, basePrice:28, xp:13 },
+    { id:'nether_wart', name:'Verrue du Nether', emoji:'🔥', tier:5, unlockLevel:30, seedCost:60, growMinutes:45, baseYield:10, basePrice:45, xp:20 },
+    { id:'chorus_fruit', name:'Fruit chorus', emoji:'🟪', tier:6, unlockLevel:45, seedCost:100, growMinutes:60, baseYield:12, basePrice:80, xp:35 },
+  ];
+
+  const TIERS = [
+    { id:1, name:'Plaine', level:1 },
+    { id:2, name:'Village', level:5 },
+    { id:3, name:'Verger', level:12 },
+    { id:4, name:'Jungle', level:20 },
+    { id:5, name:'Nether', level:30 },
+    { id:6, name:'End', level:45 },
+  ];
+
+  const COMMANDS = [
+    { cmd:'/list', desc:"Affiche la liste des mini-jeux disponibles sur CedJeux.", example:'/list', cat:'cedjeux' },
+    { cmd:'/codex', desc:"Ouvre ton panneau privé Farm2Win (salon dédié, menu de cultures, plantation en un clic).", example:'/codex', cat:'farm2win' },
+    { cmd:'/plant', desc:"Plante une culture sur une parcelle libre.", example:'/plant culture:Blé parcelle:2', cat:'farm2win' },
+    { cmd:'/farm', desc:"Affiche l'état de toutes tes parcelles, avec le stade de pousse.", example:'/farm', cat:'farm2win' },
+    { cmd:'/harvest', desc:"Récolte toutes les parcelles prêtes d'un coup (replantation auto si activée).", example:'/harvest', cat:'farm2win' },
+    { cmd:'/inventory', desc:"Affiche tes ressources et produits transformés, avec leur valeur.", example:'/inventory', cat:'farm2win' },
+    { cmd:'/sell', desc:"Vend une culture ou un produit (ou tout) — applique le bonus contrat si actif.", example:'/sell culture:Carotte quantite:10', cat:'farm2win' },
+    { cmd:'/market', desc:"Affiche les prix actuels et leur tendance.", example:'/market', cat:'farm2win' },
+    { cmd:'/buy', desc:"Achète une parcelle, de l'irrigation ou de l'engrais.", example:'/buy amelioration:Irrigation quantite:3', cat:'farm2win' },
+    { cmd:'/craft', desc:"Transforme des récoltes en produits plus rentables.", example:'/craft recette:Pain quantite:2', cat:'farm2win' },
+    { cmd:'/contract', desc:"Affiche le contrat spécial en cours et son bonus de prix.", example:'/contract', cat:'farm2win' },
+    { cmd:'/profile', desc:"Affiche ton niveau, tes pièces et ta progression.", example:'/profile', cat:'farm2win' },
+    { cmd:'/leaderboard', desc:"Top 10 des fermiers les plus riches du serveur.", example:'/leaderboard', cat:'farm2win' },
+    { cmd:'/weekly', desc:"Top 10 des gains de la semaine en cours, remis à zéro chaque lundi.", example:'/weekly', cat:'farm2win' },
+    { cmd:'/daily', desc:"Récompense quotidienne en pièces (cooldown 20h).", example:'/daily', cat:'farm2win' },
+  ];
+
+  const RECIPES = [
+    { id:'bread', name:'Pain', emoji:'🍞', price:18, inputs:[{cropId:'wheat', qty:3}] },
+    { id:'pumpkin_pie', name:'Tarte à la citrouille', emoji:'🥧', price:55, inputs:[{cropId:'pumpkin', qty:2},{cropId:'wheat', qty:1}] },
+    { id:'cane_syrup', name:'Sirop de canne', emoji:'🍯', price:95, inputs:[{cropId:'sugar_cane', qty:4}] },
+  ];
+
+  const tierById = Object.fromEntries(TIERS.map(t => [t.id, t]));
+  const maxGrow = Math.max(...CROPS.map(c => c.growMinutes));
+
+  function formatDuration(min){
+    if(min < 60) return min + ' min';
+    const h = Math.floor(min/60), m = min%60;
+    return m ? h+'h'+String(m).padStart(2,'0') : h+'h';
+  }
+
+  // ---- state ----
+  let activeTier = 'all';
+  let query = '';
+  let sortMode = 'unlock';
+  let selectedCropId = 'wheat';
+  let speedLevel = 0;
+  let yieldLevel = 0;
+  let quantity = 4;
+
+  // ---- tier chips ----
+  const chipsEl = document.getElementById('tierChips');
+  function renderChips(){
+    const all = document.createElement('button');
+    all.className = 'chip'; all.textContent = 'Tous'; all.type = 'button';
+    all.setAttribute('aria-pressed', activeTier === 'all');
+    all.addEventListener('click', () => { activeTier = 'all'; renderChips(); renderCodex(); });
+    chipsEl.innerHTML = '';
+    chipsEl.appendChild(all);
+    TIERS.forEach(t => {
+      const b = document.createElement('button');
+      b.className = 'chip'; b.type = 'button'; b.textContent = t.name;
+      b.setAttribute('aria-pressed', activeTier === t.id);
+      b.addEventListener('click', () => { activeTier = t.id; renderChips(); renderCodex(); });
+      chipsEl.appendChild(b);
+    });
+  }
+
+  // ---- codex ----
+  const codexEl = document.getElementById('codex');
+  function getFiltered(){
+    let list = CROPS.filter(c => c.name.toLowerCase().includes(query.toLowerCase()));
+    if(activeTier !== 'all') list = list.filter(c => c.tier === activeTier);
+    const sorted = [...list];
+    if(sortMode === 'price-asc') sorted.sort((a,b) => a.basePrice - b.basePrice);
+    else if(sortMode === 'price-desc') sorted.sort((a,b) => b.basePrice - a.basePrice);
+    else if(sortMode === 'grow-asc') sorted.sort((a,b) => a.growMinutes - b.growMinutes);
+    else sorted.sort((a,b) => a.unlockLevel - b.unlockLevel);
+    return sorted;
+  }
+
+  function renderCodex(){
+    const filtered = getFiltered();
+    codexEl.innerHTML = '';
+    if(filtered.length === 0){
+      codexEl.innerHTML = '<p class="crop-empty">Aucune culture ne correspond à ta recherche.</p>';
+      return;
+    }
+    if(sortMode !== 'unlock'){
+      const grid = document.createElement('div');
+      grid.className = 'crop-grid';
+      filtered.forEach(c => grid.appendChild(cropCard(c)));
+      codexEl.appendChild(grid);
+      return;
+    }
+    TIERS.forEach(tier => {
+      const cropsInTier = filtered.filter(c => c.tier === tier.id);
+      if(cropsInTier.length === 0) return;
+      const band = document.createElement('div');
+      band.className = 'tier-band';
+      band.innerHTML = `<div class="tier-head">
+          <span class="tier-dot" style="background:var(--tier${tier.id})"></span>
+          <span class="tier-name">${tier.name}</span>
+          <span class="tier-range">Niveau ${tier.level}+</span>
+        </div>`;
+      const grid = document.createElement('div');
+      grid.className = 'crop-grid';
+      cropsInTier.forEach(c => grid.appendChild(cropCard(c)));
+      band.appendChild(grid);
+      codexEl.appendChild(band);
+    });
+  }
+
+  function cropCard(c){
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'crop-card' + (c.id === selectedCropId ? ' active' : '');
+    card.style.setProperty('--tier-c', `var(--tier${c.tier})`);
+    card.style.setProperty('--tier-soft', `var(--tier${c.tier}-soft)`);
+    const growPct = Math.round((c.growMinutes / maxGrow) * 100);
+    card.innerHTML = `
+      <div class="emoji">${c.emoji}</div>
+      <div class="name">${c.name}</div>
+      <span class="lvl">NIV. ${c.unlockLevel}</span>
+      <div class="grow-bar"><span style="width:${growPct}%"></span></div>
+      <div class="price-line"><span class="tnum">${formatDuration(c.growMinutes)}</span><span class="tnum">🪙${c.basePrice}</span></div>
+    `;
+    card.addEventListener('click', () => { selectedCropId = c.id; renderCodex(); renderDetail(); });
+    return card;
+  }
+
+  // ---- detail panel ----
+  const detailEl = document.getElementById('detail');
+  function renderDetail(){
+    const c = CROPS.find(x => x.id === selectedCropId);
+    const tier = tierById[c.tier];
+
+    const speedReduction = Math.min(0.45, speedLevel * 0.03);
+    const growMs = c.growMinutes * 60000 * (1 - speedReduction);
+    const growMinAdj = Math.round(growMs / 60000);
+    const yieldAmt = Math.round(c.baseYield * (1 + yieldLevel * 0.05));
+
+    const totalSeedCost = c.seedCost * quantity;
+    const totalYield = yieldAmt * quantity;
+    const totalRevenue = totalYield * c.basePrice;
+    const profit = totalRevenue - totalSeedCost;
+    const hours = growMs / 3600000;
+    const profitPerHour = hours > 0 ? Math.round(profit / hours) : 0;
+
+    detailEl.style.setProperty('--tier-c', `var(--tier${c.tier})`);
+    detailEl.innerHTML = `
+      <div class="detail-head">
+        <span class="emoji">${c.emoji}</span>
+        <div>
+          <h2>${c.name}</h2>
+          <span class="detail-tier" style="background:var(--tier${c.tier}-soft); color:var(--tier${c.tier})">${tier.name} · niveau ${c.unlockLevel}</span>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><span class="k">Coût graine</span><span class="v tnum">🪙 ${c.seedCost}</span></div>
+        <div class="stat"><span class="k">Prix de vente</span><span class="v tnum">🪙 ${c.basePrice}</span></div>
+        <div class="stat"><span class="k">Temps de pousse</span><span class="v tnum">${formatDuration(c.growMinutes)}</span></div>
+        <div class="stat"><span class="k">Rendement</span><span class="v tnum">${c.baseYield} / récolte</span></div>
+        <div class="stat"><span class="k">XP gagnée</span><span class="v tnum">+${c.xp} xp</span></div>
+        <div class="stat"><span class="k">Marché</span><span class="v tnum">×0.65 – ×1.40</span></div>
+      </div>
+
+      <div class="calc">
+        <h3>Simulateur de récolte</h3>
+
+        <div class="calc-row">
+          <label for="qtyInput">Parcelles plantées</label>
+          <input id="qtyInput" type="number" min="1" max="40" value="${quantity}">
+        </div>
+
+        <div class="calc-row">
+          <label for="speedInput">Irrigation</label>
+          <input id="speedInput" type="range" min="0" max="15" value="${speedLevel}">
+          <span class="calc-val tnum">${speedLevel}</span>
+        </div>
+
+        <div class="calc-row">
+          <label for="yieldInput">Engrais</label>
+          <input id="yieldInput" type="range" min="0" max="20" value="${yieldLevel}">
+          <span class="calc-val tnum">${yieldLevel}</span>
+        </div>
+
+        <div class="calc-out">
+          <div class="cell"><div class="k">Coût total</div><div class="v tnum">🪙 ${totalSeedCost}</div></div>
+          <div class="cell"><div class="k">Temps réel</div><div class="v tnum">${formatDuration(growMinAdj)}</div></div>
+          <div class="cell"><div class="k">Récolte</div><div class="v tnum">${totalYield} unités</div></div>
+          <div class="cell profit"><div class="k">Profit estimé</div><div class="v tnum">🪙 ${profit >= 0 ? '+' : ''}${profit}</div></div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('qtyInput').addEventListener('input', e => {
+      quantity = Math.max(1, Math.min(40, Number(e.target.value) || 1));
+      renderDetail();
+    });
+    document.getElementById('speedInput').addEventListener('input', e => {
+      speedLevel = Number(e.target.value); renderDetail();
+    });
+    document.getElementById('yieldInput').addEventListener('input', e => {
+      yieldLevel = Number(e.target.value); renderDetail();
+    });
+  }
+
+  // ---- recipes ----
+  const cropById = Object.fromEntries(CROPS.map(c => [c.id, c]));
+  const recipeListEl = document.getElementById('recipeList');
+  function renderRecipes(){
+    recipeListEl.innerHTML = '';
+    RECIPES.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      const ingredientsHtml = r.inputs.map((ing, i) => {
+        const crop = cropById[ing.cropId];
+        const sep = i < r.inputs.length - 1 ? '<span class="recipe-plus">+</span>' : '';
+        return `<span class="recipe-ing">${crop.emoji} ${ing.qty}× ${crop.name}</span>${sep}`;
+      }).join('');
+      card.innerHTML = `
+        <div class="recipe-title">
+          <span class="emoji">${r.emoji}</span>
+          <span class="name">${r.name}</span>
+          <span class="recipe-price tnum">🪙 ${r.price}</span>
+        </div>
+        <div class="recipe-flow">
+          ${ingredientsHtml}
+          <span class="recipe-arrow">→</span>
+          <span class="recipe-ing">${r.emoji} 1× ${r.name}</span>
+        </div>
+      `;
+      recipeListEl.appendChild(card);
+    });
+  }
+
+  // ---- commands ----
+  const cmdListEl = document.getElementById('cmdList');
+  function renderCommands(){
+    cmdListEl.innerHTML = '';
+    COMMANDS.forEach((c, i) => {
+      const item = document.createElement('div');
+      item.className = 'cmd-item';
+      item.innerHTML = `
+        <button class="cmd-trigger" type="button" aria-expanded="false">
+          <span class="badge ${c.cat === 'cedjeux' ? 'badge-cedjeux' : 'badge-farm2win'}">${c.cat === 'cedjeux' ? 'CedJeux' : 'Farm2Win'}</span>
+          <code>${c.cmd}</code>
+          <span class="desc">${c.desc}</span>
+          <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+        <div class="cmd-body"><div class="cmd-body-inner"><span class="cmd-example">${c.example}</span></div></div>
+      `;
+      const trigger = item.querySelector('.cmd-trigger');
+      trigger.addEventListener('click', () => {
+        const open = item.classList.toggle('open');
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      cmdListEl.appendChild(item);
+    });
+  }
+
+  // ---- wiring ----
+  document.getElementById('search').addEventListener('input', e => {
+    query = e.target.value; renderCodex();
+  });
+  document.getElementById('sort').addEventListener('change', e => {
+    sortMode = e.target.value; renderCodex();
+  });
+
+  renderChips();
+  renderCodex();
+  renderDetail();
+  renderRecipes();
+  renderCommands();
+})();
+</script>
+
+</body>
+</html>
